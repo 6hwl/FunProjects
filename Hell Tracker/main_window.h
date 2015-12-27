@@ -57,12 +57,10 @@ private:
 				QGroupBox* eyeBox;
 				QVBoxLayout* eyeLayout;
 				QComboBox* eyeList;
-				QLabel* eyeLabel;
 
 				QGroupBox* orbBox;
 				QVBoxLayout* orbLayout;
 				QComboBox* orbList;
-				QLabel* orbLabel;
 
 				QGroupBox* runBox;
 				QVBoxLayout* hellNumberLayout;
@@ -70,7 +68,11 @@ private:
 				QLineEdit* hellNumberInput;
 
 		QWidget* middleWidget;	
-			QVBoxLayout* optionsLayout2;
+			QHBoxLayout* optionsLayout2;
+				QGroupBox* invitesBox;
+				QVBoxLayout* invitesLayout;
+				QComboBox* invitesList;
+
 				QGroupBox* epicBox;
 				QVBoxLayout* epicLayout;
 				QComboBox* numEpicsList;

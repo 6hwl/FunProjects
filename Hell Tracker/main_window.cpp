@@ -42,8 +42,8 @@ MainWindow::MainWindow() {
 	//topWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
 
 	middleWidget = new QWidget;
-	optionsLayout2 = new QVBoxLayout(middleWidget);
-	//middleWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
+	optionsLayout2 = new QHBoxLayout(middleWidget);
+	//middleWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
 	bottomWidget = new QWidget;
 	buttonLayout = new QVBoxLayout(bottomWidget);
@@ -132,6 +132,20 @@ MainWindow::MainWindow() {
 	orbBox->setLayout(orbLayout);
 	
 
+	// Configuring demon invites dropped options (post-All in One patch)
+	invitesLayout = new QVBoxLayout();
+	invitesBox = new QGroupBox("Demon Invitations");
+	//invitesBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
+	optionsLayout2->addWidget(invitesBox);
+
+	invitesList = new QComboBox();
+	invitesList->addItems(numberList); // numberList defined in demon eye section
+	invitesList->setMaximumWidth(45);
+	invitesList->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
+	invitesLayout->addWidget(invitesList, 0, Qt::AlignTop);
+	invitesBox->setLayout(invitesLayout);
 
 
 	// Configuring got epic/no epic options
@@ -142,9 +156,9 @@ MainWindow::MainWindow() {
 	optionsLayout2->addWidget(epicBox);
 
 	numEpicsList = new QComboBox();
-	numEpicsList->addItems(numberList);
+	numEpicsList->addItems(numberList); // numberList defined in demon eye section
 	numEpicsList->setMaximumWidth(45);
-	eyeList->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+	//numEpicsList->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
 	epicInputLabel = new QLabel("Enter epic name:");
 	epicNameInput = new QLineEdit();
