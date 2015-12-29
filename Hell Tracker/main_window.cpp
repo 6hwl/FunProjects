@@ -6,6 +6,7 @@
 #include "main_window.h"
 #include "stats_window.h"
 #include "parselog.h"
+#include "binsearch.h"
 
 using namespace std;
 
@@ -67,7 +68,7 @@ MainWindow::MainWindow() {
 	hellNumberInput->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
 	//hellNumberLayout->addWidget(hellNumberLabel);
-	hellNumberLayout->addWidget(hellNumberInput);
+	hellNumberLayout->addWidget(hellNumberInput, 0, Qt::AlignTop);
 
 	runBox->setLayout(hellNumberLayout);
 
@@ -84,33 +85,35 @@ MainWindow::MainWindow() {
 
 	hardcore->setChecked(true);
 
-	difficultyLayout->addWidget(hardcore);
-	difficultyLayout->addWidget(insane);
+	difficultyLayout->addWidget(hardcore, 0, Qt::AlignTop);
+	difficultyLayout->addWidget(insane, 0, Qt::AlignTop);
 
 	difficultyBox->setLayout(difficultyLayout);
 
 
-	// Configuring demon eye options
+	// Configuring QComboBox lists
 	QStringList numberList;
 	numberList << "0" << "1" << "2" << "3" << "4" << "5";
 	QFont myFont;
 	QFontMetrics fontmetric(myFont);
 	//int pixelWidth = fontmetric.width("5");
 
-	eyeBox = new QGroupBox("Demon Eyes");
-	eyeLayout = new QVBoxLayout();
+	// Configuring demon invites dropped options (post-All in One patch)
+	invitesLayout = new QVBoxLayout();
+	invitesBox = new QGroupBox("Demon Invitations");
 
-	optionsLayout->addWidget(eyeBox);
+	optionsLayout->addWidget(invitesBox);
 
-	eyeList = new QComboBox();
-	eyeList->addItems(numberList);
-	eyeList->setMaximumWidth(45);
-	//eyeList->resize(0, 1);
-	//eyeList->setStyleSheet("padding: 0");
-	//eyeList->view()->setMinimumWidth(1);
-	eyeLayout->addWidget(eyeList);
+	invitesList = new QComboBox();
+	invitesList->addItems(numberList); // numberList defined in demon eye section
+	invitesList->setMaximumWidth(45);
+	invitesList->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
-	eyeBox->setLayout(eyeLayout);
+	invitesLayout->addWidget(invitesList, 0, Qt::AlignTop);
+	invitesBox->setLayout(invitesLayout);
+
+
+
 
 
 	// Configuring hell orb options
@@ -127,25 +130,23 @@ MainWindow::MainWindow() {
 	//orbList->resize(0, 1);
 	//orbList->setStyleSheet("padding: 0");
 	//orbList->view()->setMinimumWidth(1);
-	orbLayout->addWidget(orbList);
+	orbLayout->addWidget(orbList, 0, Qt::AlignTop);
 
 	orbBox->setLayout(orbLayout);
 	
 
-	// Configuring demon invites dropped options (post-All in One patch)
-	invitesLayout = new QVBoxLayout();
-	invitesBox = new QGroupBox("Demon Invitations");
-	//invitesBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+	// Configuring demon eye options
+	eyeBox = new QGroupBox("Demon Eyes");
+	eyeLayout = new QVBoxLayout();
 
-	optionsLayout2->addWidget(invitesBox);
+	optionsLayout2->addWidget(eyeBox);
 
-	invitesList = new QComboBox();
-	invitesList->addItems(numberList); // numberList defined in demon eye section
-	invitesList->setMaximumWidth(45);
-	invitesList->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+	eyeList = new QComboBox();
+	eyeList->addItems(numberList);
+	eyeList->setMaximumWidth(45);
 
-	invitesLayout->addWidget(invitesList, 0, Qt::AlignTop);
-	invitesBox->setLayout(invitesLayout);
+	eyeLayout->addWidget(eyeList, 0, Qt::AlignTop);
+	eyeBox->setLayout(eyeLayout);
 
 
 	// Configuring got epic/no epic options
@@ -196,15 +197,6 @@ MainWindow::MainWindow() {
 	connect(addRun, SIGNAL(clicked()), this, SLOT(clickedAdd()), Qt::UniqueConnection);
 
 
-	// Error windows for invalid hell information
-	invalidRun = new QMessageBox();
-	invalidNumber = new QMessageBox();
-
-	invalidRun->setWindowTitle("ERROR");
-	invalidRun->setText("Please enter a number");
-	invalidNumber->setWindowTitle("ERROR");
-	invalidNumber->setText("Invalid number");
-
 
 	// Configuring hell statistics
 	statsWindow = new StatsWindow(run_log);
@@ -221,13 +213,47 @@ MainWindow::MainWindow() {
 	connect(quitButton, SIGNAL(clicked()), qApp, SLOT(quit()));
 
 
+
+
+	// Error windows for invalid hell information
+	invalidRun = new QMessageBox();
+	invalidNumber = new QMessageBox();
+	dupeRunNumber = new QMessageBox();
+
+	invalidRun->setWindowTitle("ERROR");
+	invalidRun->setText("Please enter a number");
+
+	invalidNumber->setWindowTitle("ERROR");
+	invalidNumber->setText("Invalid number");
+
+	dupeRunNumber->setWindowTitle("ERROR");
+
+
 	setLayout(overallLayout);
 
 }
 
-MainWindow::~MainWindow() {}
+MainWindow::~MainWindow() {
+	
+	for (int i = 0; i < run_log.size(); i++) {
+		delete run_log[i];
+	}
+	
+	delete invalidRun;
+	delete invalidNumber;
+	delete dupeRunNumber;
+	delete currRun;
+	delete statsWindow;
+	delete optionsLayout;
+	delete topWidget;
+	delete optionsLayout2;
+	delete middleWidget;
+	delete buttonLayout;
+	delete bottomWidget;
+	delete overallLayout;
+}
 
-vector<HellRun*>& MainWindow::getRuns() {
+ArrayList<HellRun*>& MainWindow::getRuns() {
 	return run_log;
 }
 
@@ -297,78 +323,96 @@ void MainWindow::clickedAdd() {
 		istringstream toInt(input);
 		int runNumber;
 		toInt >> runNumber;
-		currRun->setRunNum(runNumber);
 
-		if (insane->isChecked())
-			currRun->setDifficulty(true);
+		if (binarySearch(run_log, 0, run_log.size() - 1, runNumber) != -1) {
+			QString text = QString::fromStdString("Run #" + input + " already exists");
+			dupeRunNumber->setText(text);
+			dupeRunNumber->exec();
+		} else {
+			currRun->setRunNum(runNumber);
 
-		currRun->setEyes(atoi(eyeList->currentText().toStdString().c_str()));
-		currRun->setOrbs(atoi(orbList->currentText().toStdString().c_str()));
+			if (insane->isChecked())
+				currRun->setDifficulty(true);
 
-		string numEpics = numEpicsList->currentText().toStdString();
-		string epicInput = epicNameInput->text().toStdString();
-		string epicInput2 = epicNameInput2->text().toStdString();
-		string epicInput3 = epicNameInput3->text().toStdString();
-		string epicInput4 = epicNameInput4->text().toStdString();
-		string epicInput5 = epicNameInput5->text().toStdString();
+			currRun->setEyes(atoi(eyeList->currentText().toStdString().c_str()));
+			currRun->setOrbs(atoi(orbList->currentText().toStdString().c_str()));
+			currRun->setInvites(atoi(invitesList->currentText().toStdString().c_str()));
 
-		if (numEpics != "0")
-			currRun->setDropped(true);
-		if (numEpics == "1") {
-			currRun->addEpic(epicInput);
-		} else if (numEpics == "2") {
-			currRun->addEpic(epicInput);
-			currRun->addEpic(epicInput2);
-		} else if (numEpics == "3") {
-			currRun->addEpic(epicInput);
-			currRun->addEpic(epicInput2);
-			currRun->addEpic(epicInput3);
-		} else if (numEpics == "4") {
-			currRun->addEpic(epicInput);
-			currRun->addEpic(epicInput2);
-			currRun->addEpic(epicInput3);
-			currRun->addEpic(epicInput4);
-		} else if (numEpics == "5") {
-			currRun->addEpic(epicInput);
-			currRun->addEpic(epicInput2);
-			currRun->addEpic(epicInput3);
-			currRun->addEpic(epicInput4);
-			currRun->addEpic(epicInput5);
+			string numEpics = numEpicsList->currentText().toStdString();
+			string epicInput = epicNameInput->text().toStdString();
+			string epicInput2 = epicNameInput2->text().toStdString();
+			string epicInput3 = epicNameInput3->text().toStdString();
+			string epicInput4 = epicNameInput4->text().toStdString();
+			string epicInput5 = epicNameInput5->text().toStdString();
+
+			if (numEpics == "1") {
+				if (isValid(epicInput)) currRun->addEpic(epicInput);
+			} else if (numEpics == "2") {
+				if (isValid(epicInput)) currRun->addEpic(epicInput);
+				if (isValid(epicInput2)) currRun->addEpic(epicInput2);
+			} else if (numEpics == "3") {
+				if (isValid(epicInput)) currRun->addEpic(epicInput);
+				if (isValid(epicInput2)) currRun->addEpic(epicInput2);
+				if (isValid(epicInput3)) currRun->addEpic(epicInput3);
+			} else if (numEpics == "4") {
+				if (isValid(epicInput)) currRun->addEpic(epicInput);
+				if (isValid(epicInput2)) currRun->addEpic(epicInput2);
+				if (isValid(epicInput3)) currRun->addEpic(epicInput3);
+				if (isValid(epicInput4)) currRun->addEpic(epicInput4);
+			} else if (numEpics == "5") {
+				if (isValid(epicInput)) currRun->addEpic(epicInput);
+				if (isValid(epicInput2)) currRun->addEpic(epicInput2);
+				if (isValid(epicInput3)) currRun->addEpic(epicInput3);
+				if (isValid(epicInput4)) currRun->addEpic(epicInput4);
+				if (isValid(epicInput5))currRun->addEpic(epicInput5);
+			}
+
+			if (currRun->getEpics().size() > 0)
+				currRun->setDropped(true);
+
+
+			// If the current run dropped an epic, add to epics vector
+			if (currRun->getDropped()) epics.insert(epics.size(), currRun);
+
+			// If run number is less than the last element's, insert in the middle
+			if (runNumber < run_log[run_log.size()-1]->getRunNum()) {
+				int index = getInsertionIndex(run_log, 0, run_log.size()-1, runNumber);
+				cout << index << endl;
+				run_log.insert(index, currRun);
+			} else {
+				run_log.insert(run_log.size(), currRun);
+			}
+
+			// To let the user know which run was just added
+			string newTitle = "Hell Recorder - " + input + ordIndicator(input) + " run added!";
+			setWindowTitle(QString::fromStdString(newTitle));
+			// Output data
+			output(run_log, "log.txt");
+			// Update statsWindow run_log container
+			statsWindow->updateRuns(run_log);
+
+			// Updating information and fields to be able to add a new hell run
+			currRun = new HellRun(runNumber + 1);
+			hellNumberInput->setText(QString::fromStdString(intToString(runNumber + 1)));
+			epicNameInput->setText("");
+			epicNameInput2->setText("");
+			epicNameInput3->setText("");
+			epicNameInput4->setText("");
+			epicNameInput5->setText("");
+
+			epicNameInput->setEnabled(false);
+			epicNameInput2->hide();
+			epicNameInput3->hide();
+			epicNameInput4->hide();
+			epicNameInput5->hide();
+
+			numEpicsList->setCurrentIndex(0);
+			eyeList->setCurrentIndex(0);
+			orbList->setCurrentIndex(0);
+			invitesList->setCurrentIndex(0);
+
+			QTimer::singleShot(100, this, SLOT(fixSize()));
 		}
-
-		run_log.push_back(currRun);
-
-		// To let the user know which run was just added
-		string newTitle = "Hell Recorder - " + input + ordIndicator(input) + " run added!";
-		setWindowTitle(QString::fromStdString(newTitle));
-		// Output data
-		output(run_log, "log.txt");
-		// Update statsWindow run_log container
-		statsWindow->updateRuns(run_log);
-
-		// Updating information and fields to be able to add a new hell run
-		currRun = new HellRun(runNumber + 1);
-		hellNumberInput->setText(QString::fromStdString(intToString(runNumber + 1)));
-		epicNameInput->setText("");
-		epicNameInput2->setText("");
-		epicNameInput3->setText("");
-		epicNameInput4->setText("");
-		epicNameInput5->setText("");
-
-		epicNameInput->setEnabled(false);
-		epicNameInput2->hide();
-		epicNameInput3->hide();
-		epicNameInput4->hide();
-		epicNameInput5->hide();
-
-		numEpicsList->setCurrentIndex(0);
-		eyeList->setCurrentIndex(0);
-		orbList->setCurrentIndex(0);
-
-		QTimer::singleShot(100, this, SLOT(fixSize()));
-
-
-
 	}
 }
 

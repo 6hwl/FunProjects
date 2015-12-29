@@ -23,14 +23,15 @@
 #include "hellrun.h"
 #include "hellstats.h"
 #include "parselog.h"
+#include "arraylist.h"
 
 class StatsWindow : public QWidget {
 	Q_OBJECT
 public:
-	StatsWindow(std::vector<HellRun*>& runs);
+	StatsWindow(ArrayList<HellRun*>& runs);
 	~StatsWindow();
 	void updateWindow();
-	void updateRuns(std::vector<HellRun*>& runs);
+	void updateRuns(ArrayList<HellRun*>& runs);
 
 private slots:
 	void clickedUpdate();
@@ -39,7 +40,7 @@ private slots:
 
 private:
 	HellStats* stats;
-	std::vector<HellRun*> _runs;
+	ArrayList<HellRun*> _runs; // takes pointers from run_log in main_window.cpp
 
 	QHBoxLayout* overallLayout;
 		QPushButton* updateButton;
@@ -59,6 +60,8 @@ private:
 				QLabel* numInsane;
 				QLabel* percentInsane;
 				QLabel* insaneEpics;
+
+				QLabel* numInvites;
 
 
 

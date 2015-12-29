@@ -20,13 +20,14 @@
 #include "hellrun.h"
 #include "stats_window.h"
 #include <vector>
+#include "arraylist.h"
 
 class MainWindow : public QWidget {
 	Q_OBJECT
 public:
 	MainWindow();
 	~MainWindow();
-	std::vector<HellRun*>& getRuns();
+	ArrayList<HellRun*>& getRuns();
 
 private slots:
 	void clickedEpic(QString text);
@@ -38,7 +39,10 @@ private slots:
 
 private:
 	StatsWindow* statsWindow;
-	std::vector<HellRun*> run_log;
+	//std::vector<HellRun*> run_log;
+	ArrayList<HellRun*> run_log;
+	//std::vector<HellRun*> epics;
+	ArrayList<HellRun*> epics;
 	HellRun* currRun;
 
 	// Layouts
@@ -46,6 +50,8 @@ private:
 
 		QMessageBox* invalidRun;
 		QMessageBox* invalidNumber;
+		QMessageBox* dupeRunNumber;
+		
 		QWidget* topWidget;
 			QHBoxLayout* optionsLayout;
 				// Group Boxes

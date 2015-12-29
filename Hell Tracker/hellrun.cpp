@@ -9,6 +9,7 @@ HellRun::HellRun(int curr) {
 	run_number = curr;
 	eyes = 0;
 	orbs = 0;
+	invites = 0;
 	insane = false; // Defaults to hardcore mode
 	epic_dropped = false;
 }
@@ -20,10 +21,10 @@ void HellRun::setDifficulty(bool b) {
 }
 
 void HellRun::addEpic(string name) {
-	epics.push_back(name);
+	epics.insert(epics.size(), name);
 }
 
-void HellRun::addEpics(std::vector<string> other_epics) {
+void HellRun::addEpics(ArrayList<string> other_epics) {
 	epics = other_epics;
 }
 
@@ -43,13 +44,17 @@ void HellRun::setOrbs(int n) {
 	orbs = n;
 }
 
+void HellRun::setInvites(int n) {
+	invites = n;
+}
+
 
 
 bool HellRun::getDifficulty() {
 	return insane;
 }
 
-vector<string> HellRun::getEpics() {
+ArrayList<string> HellRun::getEpics() {
 	return epics;
 }
 
@@ -67,4 +72,8 @@ int HellRun::getEyes() {
 
 int HellRun::getOrbs() {
 	return orbs;
+}
+
+int HellRun::getInvites() {
+	return invites;
 }

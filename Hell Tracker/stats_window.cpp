@@ -2,11 +2,12 @@
 
 using namespace std;
 
-StatsWindow::StatsWindow(vector<HellRun*>& runs) {
+StatsWindow::StatsWindow(ArrayList<HellRun*>& runs) {
 	_runs = runs;
 	stats = new HellStats(_runs);
 
 	overallLayout = new QHBoxLayout();
+	setWindowTitle("Hell Recorder - Statistics");
 
 	// Setting up stats group
 	statsLayout = new QVBoxLayout();
@@ -14,19 +15,13 @@ StatsWindow::StatsWindow(vector<HellRun*>& runs) {
 
 	overallLayout->addWidget(statsBox);
 
-	QString hells = QString::fromStdString("Total number of hell runs: " + intToString(_runs.size()));
-	QString hardcores = QString::fromStdString("Number of hardcore runs: " + intToString(stats->getHardcores()));
-	QString insanes = QString::fromStdString("Number of insane runs: " + intToString(_runs.size() - stats->getHardcores()));
-	QString epics = QString::fromStdString("Total number of epics obtained: " + intToString(stats->getEpics()));
-	QString eyes = QString::fromStdString("Total number of demon eyes obtained: " + intToString(stats->getEyes()));
-	QString orbs = QString::fromStdString("Total number of hell orbs obtained: " + intToString(stats->getOrbs()));
-
-	numHells = new QLabel(hells);
-	numEyes = new QLabel(eyes);
-	numOrbs = new QLabel(orbs);
-	numEpics = new QLabel(epics);
-	numHardcore = new QLabel(hardcores);
-	numInsane = new QLabel(insanes);
+	numHells = new QLabel();
+	numInvites = new QLabel();
+	numEyes = new QLabel();
+	numOrbs = new QLabel();
+	numEpics = new QLabel();
+	numHardcore = new QLabel();
+	numInsane = new QLabel();
 
 	statsLayout->addWidget(numHells);
 	statsLayout->addWidget(numHardcore);
@@ -34,6 +29,7 @@ StatsWindow::StatsWindow(vector<HellRun*>& runs) {
 	statsLayout->addWidget(numEpics);
 	statsLayout->addWidget(numOrbs);
 	statsLayout->addWidget(numEyes);
+	statsLayout->addWidget(numInvites);
 
 	statsBox->setLayout(statsLayout);
 
@@ -48,18 +44,20 @@ StatsWindow::StatsWindow(vector<HellRun*>& runs) {
 }
 
 StatsWindow::~StatsWindow() {
-
+	delete stats;
+	delete overallLayout;
 }
 
 void StatsWindow::updateWindow() {
 	stats->update(_runs);
 
-	QString hells = QString::fromStdString("Total number of hell runs: " + intToString(_runs.size()));
-	QString hardcores = QString::fromStdString("Number of hardcore runs: " + intToString(stats->getHardcores()));
-	QString insanes = QString::fromStdString("Number of insane runs: " + intToString(_runs.size() - stats->getHardcores()));
-	QString epics = QString::fromStdString("Total number of epics obtained: " + intToString(stats->getEpics()));
-	QString eyes = QString::fromStdString("Total number of demon eyes obtained: " + intToString(stats->getEyes()));
-	QString orbs = QString::fromStdString("Total number of hell orbs obtained: " + intToString(stats->getOrbs()));
+	QString hells = QString::fromStdString("Total # of hell runs: " + intToString(_runs.size()));
+	QString hardcores = QString::fromStdString("Hardcore runs: " + intToString(stats->getHardcores()));
+	QString insanes = QString::fromStdString("Insane runs: " + intToString(_runs.size() - stats->getHardcores()));
+	QString epics = QString::fromStdString("Epics obtained: " + intToString(stats->getEpics()));
+	QString eyes = QString::fromStdString("Demon eyes obtained: " + intToString(stats->getEyes()));
+	QString orbs = QString::fromStdString("Hell orbs obtained: " + intToString(stats->getOrbs()));
+	QString invites = QString::fromStdString("Demon invitations obtained: " + intToString(stats->getInvites()));
 
 	numHells->setText(hells);
 	numEyes->setText(eyes);
@@ -67,9 +65,10 @@ void StatsWindow::updateWindow() {
 	numEpics->setText(epics);
 	numHardcore->setText(hardcores);
 	numInsane->setText(insanes);
+	numInvites->setText(invites);
 }
 
-void StatsWindow::updateRuns(std::vector<HellRun*>& runs) {
+void StatsWindow::updateRuns(ArrayList<HellRun*>& runs) {
 	_runs = runs;
 }
 

@@ -3,6 +3,7 @@
 
 #include "hellrun.h"
 #include <vector>
+#include "arraylist.h"
 
 /* This file was originally made for my parsing functions, 
 ** but I have just made it contain all of my etc. functions
@@ -11,10 +12,13 @@
 
 
 // Parses the information from log.txt into respective containers
-void parse(std::vector<HellRun*>& runs, std::string filename);
+void parse(ArrayList<HellRun*>& runs, std::string filename);
+
+// Old version of parse function to accomodate older versions of the program
+void parse_old(ArrayList<HellRun*>& runs, std::string filename);
 
 // Outputs all of the information currently in runs to log.txt
-void output(std::vector<HellRun*>& runs, std::string filename);
+void output(ArrayList<HellRun*>& runs, std::string filename);
 
 // TODO
 std::string nameCleanup(std::string s);
@@ -30,6 +34,9 @@ std::string ordIndicator(std::string s);
 
 // Converts a string to all lowercase characters
 std::string lowercase(std::string s);
+
+// Determines if an input for an epic name is invalid
+bool isValid(std::string input);
 
 
 #endif
