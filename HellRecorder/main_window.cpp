@@ -12,7 +12,7 @@ using namespace std;
 
 MainWindow::MainWindow() {
 
-	parse(run_log, "log.txt");
+	parse(run_log, epics, "log.txt");
 	/*
 	cout << run_log[0]->getRunNum() << endl;
 	cout << run_log[0]->getDifficulty() << endl;
@@ -23,15 +23,26 @@ MainWindow::MainWindow() {
 	
 
 	int prevRun = 0;
+	dryStreak = 0;
 	// If statement to prevent segfault/accessing bad memory/index
-	if (run_log.size() != 0)
+	if (run_log.size() != 0) {
 		prevRun = run_log[run_log.size()-1]->getRunNum(); // Get run number from last run of vector
+		int index = run_log.size()-1;
+		while (index > -1) {
+			if (run_log[index]->getDropped())
+				break;
+			else dryStreak++;
+			index--;
+		}
+	}
 
-	QString result = QString::fromStdString(intToString(prevRun + 1));
+	QString currRunNumber = QString::fromStdString(intToString(prevRun + 1));
+	QString currDryStreak = QString::fromStdString("Dry Streak: " + intToString(dryStreak));
 
 	currRun = new HellRun(prevRun + 1); // Defaults to next run after previous
 
-	//cout << run_log.size() << " was the number of hells" << endl;
+
+
 
 
 	// Set main window's overall layout
@@ -63,12 +74,14 @@ MainWindow::MainWindow() {
 	optionsLayout->addWidget(runBox);
 
 	hellNumberLabel = new QLabel("Current Hell Run:");
-	hellNumberInput = new QLineEdit(result);
+	hellNumberInput = new QLineEdit(currRunNumber);
 	hellNumberInput->setMaximumWidth(80);
 	hellNumberInput->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
-	//hellNumberLayout->addWidget(hellNumberLabel);
 	hellNumberLayout->addWidget(hellNumberInput, 0, Qt::AlignTop);
+
+	dryStreakLabel = new QLabel(currDryStreak);
+	hellNumberLayout->addWidget(dryStreakLabel, 0, Qt::AlignTop);
 
 	runBox->setLayout(hellNumberLayout);
 
@@ -112,34 +125,13 @@ MainWindow::MainWindow() {
 	invitesLayout->addWidget(invitesList, 0, Qt::AlignTop);
 	invitesBox->setLayout(invitesLayout);
 
-
-
-
-
-	// Configuring hell orb options
-	
-	orbBox = new QGroupBox("Hell Orbs");
-	orbLayout = new QVBoxLayout();
-
-	optionsLayout->addWidget(orbBox);
-
-	orbList = new QComboBox();
-	orbList->addItems(numberList); // numberList defined when doing demon eye options
-	orbList->setMaximumWidth(45);
-	orbList->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-	//orbList->resize(0, 1);
-	//orbList->setStyleSheet("padding: 0");
-	//orbList->view()->setMinimumWidth(1);
-	orbLayout->addWidget(orbList, 0, Qt::AlignTop);
-
-	orbBox->setLayout(orbLayout);
 	
 
 	// Configuring demon eye options
 	eyeBox = new QGroupBox("Demon Eyes");
 	eyeLayout = new QVBoxLayout();
 
-	optionsLayout2->addWidget(eyeBox);
+	optionsLayout->addWidget(eyeBox);
 
 	eyeList = new QComboBox();
 	eyeList->addItems(numberList);
@@ -147,6 +139,22 @@ MainWindow::MainWindow() {
 
 	eyeLayout->addWidget(eyeList, 0, Qt::AlignTop);
 	eyeBox->setLayout(eyeLayout);
+
+
+	// Configuring hell orb options
+	
+	orbBox = new QGroupBox("Hell Orbs");
+	orbLayout = new QVBoxLayout();
+
+	optionsLayout2->addWidget(orbBox);
+
+	orbList = new QComboBox();
+	orbList->addItems(numberList); // numberList defined when doing demon eye options
+	orbList->setMaximumWidth(45);
+	orbList->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+	orbLayout->addWidget(orbList, 0, Qt::AlignTop);
+
+	orbBox->setLayout(orbLayout);
 
 
 	// Configuring got epic/no epic options
@@ -199,7 +207,7 @@ MainWindow::MainWindow() {
 
 
 	// Configuring hell statistics
-	statsWindow = new StatsWindow(run_log);
+	statsWindow = new StatsWindow(run_log, epics);
 	statistics = new QPushButton("Statistics");
 	buttonLayout->addWidget(statistics);
 
@@ -372,14 +380,30 @@ void MainWindow::clickedAdd() {
 
 
 			// If the current run dropped an epic, add to epics vector
-			if (currRun->getDropped()) epics.insert(epics.size(), currRun);
 
-			// If run number is less than the last element's, insert in the middle
-			if (runNumber < run_log[run_log.size()-1]->getRunNum()) {
-				int index = getInsertionIndex(run_log, 0, run_log.size()-1, runNumber);
-				cout << index << endl;
-				run_log.insert(index, currRun);
+			if (currRun->getDropped()) {
+				epics.insert(epics.size(), currRun);
+				dryStreak = 0;
 			} else {
+				dryStreak++;
+			}
+
+			bool inMiddle = true;
+			// If run number is less than the last element's, insert in the middle
+			// Will throw exception if getRunNum done when run_log is empty, thus the first if here
+			if (run_log.size() != 0) {
+				if (runNumber < run_log[run_log.size()-1]->getRunNum()) {
+					int index = getInsertionIndex(run_log, 0, run_log.size()-1, runNumber);
+					cout << index << endl;
+					run_log.insert(index, currRun);
+				} else {
+					inMiddle = false;
+				}
+			}
+
+			// Accommodating for the case that run_log is empty (initially),
+			// or if the run number of the current run is greater than the current last
+			if (inMiddle == false || run_log.size() == 0) {
 				run_log.insert(run_log.size(), currRun);
 			}
 
@@ -388,12 +412,14 @@ void MainWindow::clickedAdd() {
 			setWindowTitle(QString::fromStdString(newTitle));
 			// Output data
 			output(run_log, "log.txt");
-			// Update statsWindow run_log container
-			statsWindow->updateRuns(run_log);
+
+			// Update statsWindow _runs and _epics containers
+			statsWindow->updateRuns(run_log, epics);
 
 			// Updating information and fields to be able to add a new hell run
 			currRun = new HellRun(runNumber + 1);
 			hellNumberInput->setText(QString::fromStdString(intToString(runNumber + 1)));
+			dryStreakLabel->setText(QString::fromStdString("Dry streak: " + intToString(dryStreak)));
 			epicNameInput->setText("");
 			epicNameInput2->setText("");
 			epicNameInput3->setText("");
@@ -418,7 +444,7 @@ void MainWindow::clickedAdd() {
 
 
 void MainWindow::clickedStats() {
-	statsWindow->updateRuns(run_log);
+	statsWindow->updateRuns(run_log, epics);
 	statsWindow->updateWindow();
 	statsWindow->show();
 }

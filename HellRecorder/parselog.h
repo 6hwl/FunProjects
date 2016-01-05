@@ -12,10 +12,10 @@
 
 
 // Parses the information from log.txt into respective containers
-void parse(ArrayList<HellRun*>& runs, std::string filename);
+void parse(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics, std::string filename);
 
 // Old version of parse function to accomodate older versions of the program
-void parse_old(ArrayList<HellRun*>& runs, std::string filename);
+void parse_old(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics, std::string filename);
 
 // Outputs all of the information currently in runs to log.txt
 void output(ArrayList<HellRun*>& runs, std::string filename);

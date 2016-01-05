@@ -18,7 +18,7 @@ const int EYE_ORB = NUM_ORB - NUM_EYE;
 const int ORB_EPIC = NUM_EPIC - NUM_ORB;
 
 
-void parse(ArrayList<HellRun*>& runs, string filename) {
+void parse(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics, string filename) {
 	// Doing stuff to record info into HellRun object
 	ifstream input(filename.c_str());
 	string line;
@@ -82,7 +82,7 @@ void parse(ArrayList<HellRun*>& runs, string filename) {
 					// If alphabetical character, means it's old version
 					if (isalpha(line[i])) {
 						input.close();
-						parse_old(runs, filename);
+						parse_old(runs, epics, filename);
 						return;
 					}
 					recordOrb = true;
@@ -121,6 +121,7 @@ void parse(ArrayList<HellRun*>& runs, string filename) {
 			run->setInvites(invites);
 
 			runs.insert(runs.size(), run);
+			if (run->getDropped()) epics.insert(epics.size(), run);
 		} // end of if (line != "")
 
 	} // end of while loop
@@ -128,7 +129,7 @@ void parse(ArrayList<HellRun*>& runs, string filename) {
 } // end of function
 
 
-void parse_old(ArrayList<HellRun*>& runs, string filename) {
+void parse_old(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics, string filename) {
 	// Doing stuff to record info into HellRun object
 	ifstream input(filename.c_str());
 	string line;
@@ -214,6 +215,7 @@ void parse_old(ArrayList<HellRun*>& runs, string filename) {
 			run->addEpics(names);
 
 			runs.insert(runs.size(), run);
+			if (run->getDropped()) epics.insert(epics.size(), run);
 		} // end of if (line != "")
 
 	} // end of while loop

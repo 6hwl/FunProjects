@@ -38,6 +38,7 @@ private slots:
 
 
 private:
+	int dryStreak;
 	StatsWindow* statsWindow;
 	//std::vector<HellRun*> run_log;
 	ArrayList<HellRun*> run_log;
@@ -72,6 +73,7 @@ private:
 				QVBoxLayout* hellNumberLayout;
 				QLabel* hellNumberLabel;
 				QLineEdit* hellNumberInput;
+				QLabel* dryStreakLabel;
 
 		QWidget* middleWidget;	
 			QHBoxLayout* optionsLayout2;

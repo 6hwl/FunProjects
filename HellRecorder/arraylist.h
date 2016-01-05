@@ -63,6 +63,11 @@ class ArrayList
   void set (int position, const T& val);
 
   /**
+   * Swaps the values at indices pos1 and pos2
+   */
+  void swap (int pos1, int pos2);
+
+  /**
    * Returns the value at index, pos
    */
   T& get (int position) ;
@@ -194,6 +199,17 @@ void ArrayList<T>::set (int position, const T& val) {
     _data[position] = val;
   }
 }
+
+template <class T>
+void ArrayList<T>::swap (int pos1, int pos2) {
+  if (!(pos1 < 0 || pos2 < 0 || pos1 > _size || pos2 > _size)) {
+    T temp = _data[pos1];
+    _data[pos1] = _data[pos2];
+    _data[pos2] = temp;
+  }
+}
+
+
 
 template <class T>
 T& ArrayList<T>::get (int position) {

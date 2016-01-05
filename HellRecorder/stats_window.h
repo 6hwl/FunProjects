@@ -12,11 +12,14 @@
 #include <QCoreApplication>
 #include <QGroupBox>
 #include <QMessageBox>
-#include <QComboBox>
 #include <QStringList>
 #include <QFont>
 #include <QFontMetrics>
 #include <QSizePolicy>
+#include <QTableWidget>
+#include <QHeaderView>
+#include <QTreeView>
+#include <QStandardItemModel>
 #include <QTimer>
 
 #include <vector>
@@ -28,21 +31,31 @@
 class StatsWindow : public QWidget {
 	Q_OBJECT
 public:
-	StatsWindow(ArrayList<HellRun*>& runs);
+	StatsWindow(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics);
 	~StatsWindow();
 	void updateWindow();
-	void updateRuns(ArrayList<HellRun*>& runs);
+	void updateRuns(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics);
+	void clearTable();
+	//QSize sizeHint(QStandardItemModel* model);
 
 private slots:
 	void clickedUpdate();
+	void fixSize();
 
 
 
 private:
 	HellStats* stats;
 	ArrayList<HellRun*> _runs; // takes pointers from run_log in main_window.cpp
+	ArrayList<HellRun*> _epics; // takes pointers from epics in main_window.cpp
 
-	QHBoxLayout* overallLayout;
+	QVBoxLayout* overallLayout;
+	QHBoxLayout* tableLayout;
+
+		//QTableWidget* hellTable;
+		QTableWidget* hellTable;
+		QStandardItemModel* model;
+		QHeaderView* headerview;
 		QPushButton* updateButton;
 		QGroupBox* statsBox;
 			QVBoxLayout* statsLayout;

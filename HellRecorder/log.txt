@@ -1,1 +1,47 @@
-1    Insane     2    2    Ranger Rod
+1     Hardcore   0    0    0    None
+2     Hardcore   0    0    0    None
+3     Hardcore   0    0    0    None
+4     Hardcore   0    0    0    None
+5     Hardcore   0    0    0    None
+6     Hardcore   0    0    0    None
+7     Hardcore   0    0    0    RANGER ROD PLZ
+8     Hardcore   0    0    0    None
+9     Hardcore   0    0    0    None
+10    Hardcore   0    0    0    None
+11    Hardcore   0    0    0    None
+12    Hardcore   0    0    0    None
+13    Hardcore   0    0    0    None
+14    Hardcore   0    0    0    None
+15    Hardcore   0    0    0    None
+16    Hardcore   0    0    0    None
+17    Hardcore   0    0    0    None
+18    Hardcore   0    0    0    None
+19    Hardcore   0    0    0    None
+20    Hardcore   0    0    0    None
+21    Hardcore   0    0    0    None
+22    Hardcore   0    0    0    None
+23    Hardcore   0    0    0    None
+24    Hardcore   0    0    0    None
+25    Hardcore   0    0    0    None
+26    Hardcore   0    0    0    None
+27    Hardcore   0    0    0    None
+28    Hardcore   0    0    0    None
+29    Hardcore   0    0    0    None
+30    Hardcore   0    0    0    None
+31    Hardcore   0    0    0    None
+32    Hardcore   0    0    0    None
+33    Hardcore   0    0    0    None
+34    Hardcore   0    0    0    None
+35    Hardcore   0    0    0    None
+36    Hardcore   0    0    0    None
+37    Hardcore   0    0    0    None
+38    Hardcore   0    0    0    None
+39    Hardcore   0    0    0    None
+40    Hardcore   0    0    0    None
+41    Hardcore   0    0    0    None
+42    Hardcore   0    0    0    YIIIS
+43    Insane     0    0    0    Ranger Rod
+44    Insane     0    0    0    Silver Bullet
+45    Insane     0    0    0    Laserholic
+46    Hardcore   0    0    0    Boom & Boom/Machinist's Fury
+47    Hardcore   0    0    0    Infinity Requiem Plate Amice
