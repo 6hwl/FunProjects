@@ -45,3 +45,20 @@
 45    Insane     0    0    0    Laserholic
 46    Hardcore   0    0    0    Boom & Boom/Machinist's Fury
 47    Hardcore   0    0    0    Infinity Requiem Plate Amice
+48    Hardcore   0    0    0    None
+49    Hardcore   0    0    0    None
+50    Hardcore   0    0    0    None
+51    Hardcore   0    0    0    None
+52    Hardcore   0    0    0    None
+53    Hardcore   0    0    0    None
+54    Hardcore   0    0    0    None
+55    Hardcore   0    0    0    None
+56    Hardcore   0    0    0    Leo is gay
+57    Hardcore   0    0    0    Hello there/I am clearly not a gayboi
+58    Hardcore   0    0    0    Aboy time/Bboy time
+59    Hardcore   0    0    0    Aboy time/Bboy time
+60    Hardcore   0    0    0    a/b/c
+61    Hardcore   0    0    0    Magic Cataclysm
+62    Insane     0    0    0    Mana Swirl
+63    Insane     0    0    0    Native Ornamental Shoes
+64    Insane     0    0    0    Tarwe Ziche

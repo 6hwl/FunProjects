@@ -5,6 +5,38 @@
 #include <vector>
 #include "arraylist.h"
 
+// Structure to help my sort in stats_window
+struct Epic {
+	int runNumber;
+	std::string name;
+	bool difficulty;
+};
+
+// Comparators to help implement merge sort
+
+// Compares runNumber, but if it's the same, compare epic names.
+struct numCompare {
+	bool operator()(Epic epic1, Epic epic2) {
+		if (epic1.runNumber == epic2.runNumber)
+			return epic1.name < epic2.name;
+		else
+			return epic1.runNumber < epic2.runNumber;
+	}
+};
+
+// Solely compares epic names
+struct strCompare {
+	bool operator()(Epic epic1, Epic epic2) {
+		if (epic1.name == epic2.name)
+			return epic1.runNumber < epic2.runNumber;
+		else
+			return epic1.name < epic2.name;
+	}
+};
+
+
+
+
 class HellRun {
 public:
 	HellRun(int curr); // defaults to HARDCORE!!!

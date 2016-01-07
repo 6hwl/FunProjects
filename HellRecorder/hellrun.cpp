@@ -21,7 +21,20 @@ void HellRun::setDifficulty(bool b) {
 }
 
 void HellRun::addEpic(string name) {
-	epics.insert(epics.size(), name);
+	// Epic names in the epics ArrayList is sorted alphabetically //
+	if (epics.size() == 0) {
+		epics.insert(epics.size(), name);
+		return;
+	}
+	bool inserted = false;
+	for (int i = 0; i < epics.size(); i++) {
+		if (name < epics[i]) {
+			epics.insert(i, name);
+			inserted = true;
+			return;
+		}
+	}
+	if (inserted == false) epics.insert(epics.size(), name);
 }
 
 void HellRun::addEpics(ArrayList<string> other_epics) {

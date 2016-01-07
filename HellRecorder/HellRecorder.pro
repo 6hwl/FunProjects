@@ -20,7 +20,6 @@ HEADERS += arraylist.h \
            main_window.h \
            msort.h \
            parselog.h \
-           qsort.h \
            stats_window.h
 SOURCES += binsearch.cpp \
            hellrun.cpp \

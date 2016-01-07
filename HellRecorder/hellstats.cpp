@@ -9,16 +9,20 @@ HellStats::HellStats(ArrayList<HellRun*>& runs) {
 
 void HellStats::update(ArrayList<HellRun*>& runs) {
 	// Initialize the private member array
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		stats[i] = 0;
 	}
 
 	for (int i = 0; i < runs.size(); i++) {
-		if (runs[i]->getDifficulty() == false) stats[0] += 1;
+		if (runs[i]->getDifficulty() == false) {
+			stats[0] += 1;
+			stats[5] += runs[i]->getEpics().size();
+		}
 		stats[1] += runs[i]->getInvites();
 		stats[2] += runs[i]->getEyes();
 		stats[3] += runs[i]->getOrbs();
 		stats[4] += runs[i]->getEpics().size();
+
 	}
 
 }
@@ -41,5 +45,9 @@ int HellStats::getOrbs() {
 
 int HellStats::getEpics() {
 	return stats[4];
+}
+
+int HellStats::getHardcoreEpics() {
+	return stats[5];
 }
 

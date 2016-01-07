@@ -58,6 +58,10 @@ class ArrayList
   void remove (int pos);
 
   /**
+    * Clears the entire ArrayList and sets size to 0. Must delete individual objects manually
+    */
+  void clear ();
+  /**
    * Overwrites the old value at index, pos, with val
    */
   void set (int position, const T& val);
@@ -190,6 +194,14 @@ void ArrayList<T>::remove (int pos) {
     }
     _size = _size - 1;
   }
+}
+
+template <class T>
+void ArrayList<T>::clear () {
+  delete [] _data;
+  _data = new T[5];
+  _size = 0;
+  _cap = 5;
 }
 
 template <class T>
