@@ -13,15 +13,7 @@ using namespace std;
 MainWindow::MainWindow() {
 
 	parse(run_log, epics, "log.txt");
-	/*
-	cout << run_log[0]->getRunNum() << endl;
-	cout << run_log[0]->getDifficulty() << endl;
-	cout << run_log[0]->getEyes() << endl;
-	cout << run_log[0]->getOrbs() << endl;
-	cout << run_log[0]->getEpics().at(0) << endl;
-	*/
 	
-
 	int prevRun = 0;
 	dryStreak = 0;
 	// If statement to prevent segfault/accessing bad memory/index

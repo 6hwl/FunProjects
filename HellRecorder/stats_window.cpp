@@ -26,26 +26,10 @@ StatsWindow::StatsWindow(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics) 
 	hellTable->setColumnCount(3);
 	hellTable->setRowCount(stats->getEpics());
 	hellTable->setHorizontalHeaderLabels(categories);
-	//hellTable->setItem(0, 0, new QTableWidgetItem("Infinity Requiem Plate Amice"));
-	//hellTable->horizontalHeader()->setStretchLastSection(true);
 	headerview->setResizeMode(QHeaderView::ResizeToContents);
 	headerview->setStretchLastSection(true);
 
 	hellTable->setMinimumHeight(250);
-	
-
-	/*
-	model = new QStandardItemModel(_epics.size(), 3);
-	model->setHorizontalHeaderLabels(categories);
-	hellTable = new QTreeView(this);
-	hellTable->setModel(model);
-	headerview = hellTable->header();
-
-	hellTable->setMinimumWidth(headerview->length() + 2);
-	headerview->setResizeMode(QHeaderView::Stretch);
-	*/
-	//qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
-
 
 	overallLayout->addWidget(hellTable);
 
@@ -101,7 +85,7 @@ StatsWindow::StatsWindow(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics) 
 	// Setting up general stats group
 	generalStatsLayout = new QVBoxLayout();
 	generalStatsBox = new QGroupBox();
-	generalStatsBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+	generalStatsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	bottomLayout->addWidget(generalStatsBox);
 
@@ -119,7 +103,7 @@ StatsWindow::StatsWindow(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics) 
 	// Epic stats box
 	epicStatsLayout = new QVBoxLayout();
 	epicStatsBox = new QGroupBox();
-	epicStatsBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+	epicStatsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	bottomLayout->addWidget(epicStatsBox);
 
@@ -136,7 +120,7 @@ StatsWindow::StatsWindow(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics) 
 	// Other stats box
 	otherStatsLayout = new QVBoxLayout();
 	otherStatsBox = new QGroupBox();
-	otherStatsBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+	otherStatsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	bottomLayout->addWidget(otherStatsBox);
 
@@ -215,39 +199,6 @@ void StatsWindow::updateWindow() {
 	else
 		clickedName();
 
-	//int epicIndex = 0;
-
-	/*
-	// Important note: _epics contains HellRun* that dropped an epic
-	for (int i = 0; i < _epics.size(); i++) {
-		ArrayList<string> epicNames = _epics[i]->getEpics();
-		epicNames = _epics[i]->getEpics();
-
-		string runNumber = intToString(_epics[i]->getRunNum());
-
-		string difficulty = "";
-		if (_epics[i]->getDifficulty()) difficulty = "Insane";
-		else difficulty = "Hardcore";
-
-		for (int j = 0; j < epicNames.size(); j++) {
-			if (j != 0) epicIndex++;
-			QTableWidgetItem* item = new QTableWidgetItem(QString::fromStdString(runNumber));
-			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-			hellTable->setItem(epicIndex, 0, item);
-
-			item = new QTableWidgetItem(QString::fromStdString(difficulty));
-			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-			hellTable->setItem(epicIndex, 1, item);
-
-			item = new QTableWidgetItem(QString::fromStdString(epicNames[j]));
-			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-			hellTable->setItem(epicIndex, 2, item);
-		}
-		//removeEdit();
-		epicIndex++;
-	}
-	//QTimer::singleShot(100, this, SLOT(fixSize()));
-	*/
 }
 
 void StatsWindow::updateRuns(ArrayList<HellRun*>& runs, ArrayList<HellRun*>& epics) {

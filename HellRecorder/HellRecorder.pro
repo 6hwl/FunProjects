@@ -20,7 +20,8 @@ HEADERS += arraylist.h \
            main_window.h \
            msort.h \
            parselog.h \
-           stats_window.h
+           stats_window.h \
+           epic.h
 SOURCES += binsearch.cpp \
            hellrun.cpp \
            hellstats.cpp \
