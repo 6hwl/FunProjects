@@ -11,8 +11,7 @@
 using namespace std;
 
 MainWindow::MainWindow() {
-
-	parse(run_log, epics, "log.txt");
+	parse(run_log, epics, getFilename());
 	
 	int prevRun = 0;
 	dryStreak = 0;
@@ -39,7 +38,7 @@ MainWindow::MainWindow() {
 
 	// Set main window's overall layout
 	overallLayout = new QVBoxLayout();
-	setWindowTitle("Hell Recorder");
+	setWindowTitle("Hell Recorder v1.5");
 
 	topWidget = new QWidget;
 	optionsLayout = new QHBoxLayout(topWidget);
@@ -403,7 +402,7 @@ void MainWindow::clickedAdd() {
 			string newTitle = "Hell Recorder - " + input + ordIndicator(input) + " run added!";
 			setWindowTitle(QString::fromStdString(newTitle));
 			// Output data
-			output(run_log, "log.txt");
+			output(run_log, getFilename()); // Filename declared much earlier in constructor
 
 			// Update statsWindow _runs and _epics containers
 			statsWindow->updateRuns(run_log, epics);

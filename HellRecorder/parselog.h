@@ -38,5 +38,11 @@ std::string lowercase(std::string s);
 // Determines if an input for an epic name is invalid
 bool isValid(std::string input);
 
+// Gets the name of the file to read from (in config.txt)
+std::string getFilename();
+
+// Outputs into "config.txt" the defaults
+std::string standardOutput();
+
 
 #endif

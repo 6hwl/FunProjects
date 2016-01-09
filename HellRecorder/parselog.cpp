@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
+#include <map>
 
 using namespace std;
 
@@ -378,4 +379,48 @@ bool isValid(string input) {
 		return false;
 	else
 		return true;
+}
+
+string getFilename() {
+	ifstream input("config.txt");
+	if (input.fail()) {
+		input.close();
+		return standardOutput();
+	} else {
+		map<string, string> variables;
+		string line;
+
+		while (getline(input, line)) {
+			bool reachedEquals = false;
+			string key = "";
+			string value = "";
+			for (unsigned int i = 0; i < line.length(); i++) {
+				if (line[i] == '=')
+					reachedEquals = true;
+				else if (line[i] != ' ' && !reachedEquals)
+					key += line[i];
+				else if (reachedEquals && line[i] != ' ')
+					value += line[i];
+			}
+			variables.insert(make_pair(key, value));
+		}
+		map<string, string>::iterator it = variables.find("FILENAME");
+		if (it == variables.end()) {
+			return standardOutput();
+		} else {
+			if (it->second == "" || it->second == "config.txt") {
+				return standardOutput();
+			} else {
+				input.close();
+				return it->second;
+			}
+		}
+	}
+}
+
+string standardOutput() {
+	ofstream output("config.txt");
+	output << "FILENAME = log.txt";
+	output.close();
+	return "log.txt";
 }

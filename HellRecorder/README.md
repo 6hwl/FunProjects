@@ -1,5 +1,5 @@
 # Hell Recorder
-Current version: v1.1
+Current version: v1.4
 
 This program is a fun project that I created for myself that is related to a video game that I enjoy playing called Dungeon Fighter Online.
 
