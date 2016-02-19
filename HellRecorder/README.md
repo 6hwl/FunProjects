@@ -14,4 +14,5 @@ This program records the important information of each Hell Mode run and calcula
 TODO:  
 . Modify the way comparisons between epics work. Take the structs in hellrun.h and implement them as functions (perhaps) in another whole new class, probably the Epic class which I apparently left inside the repository but didn't include it into the compile.  
 . Add option for what channel the run was done in (?)  
-. Add a timestamp for when every run is recorded
+. Add a timestamp for when every run is recorded  
+. Possibility of using serialization to avoid having to write data to a file and reparse every time
